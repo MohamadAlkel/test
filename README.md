@@ -37,11 +37,11 @@ Best of luck !
 
 ## Step 3
 
-Based on the same dataset you will need to create a UI that will allow the user to dynamically choose which dimensions to filter by to generate a report.
+Based on the same datasets you will need to create a UI that will allow the user to dynamically choose which dimensions to filter by to generate a report.
 
 1. Create a new section.
-2. Create 2 dropdowns / select menues to filter results on the top. Feel free to add a submit button if you want.
-3. the filters need to be "type" and "key" (e.g. a possible combonation is **search** as "type" and **seo_location** as "key", this combonation should display a pie a chart that shows all the "values" that match with "seo_location" and "search". Each slice of the pie will represent a vlaue).
+2. Create 2 dropdowns / select menus to filter results on the top. Feel free to add a submit button if you want.
+3. the filters need to be "type" and "key" (e.g. a possible combination is **search** as "type" and **seo_location** as "key", this combination should display a pie a chart that shows all the "values" that match with "seo_location" and "search". Each slice of the pie will represent a value).
 4. Based on the filters selected by the user, you need to display a pie chart to display the results.
 5. The intention here is the presentation of the data.
 
