@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ShowPieChart from './ShowPieChart'
-import ShowSearch from './ShowSearch';
+import {Doughnut} from 'react-chartjs-2';
+import {FormGroup, Label, Input } from 'reactstrap';
+
 
 const jsonObj = [{
     "id": "73",
@@ -4004,32 +4006,61 @@ const jsonObj = [{
 }
 ]
 
-const types = ['filter','search', 'job_application', 'navigation']
+// const types = ['filter','search', 'job_application', 'navigation']
 
-const keys = ['seo_locations','job_types','job_application','job_navigation','application_reference','keyword','disciplines']
+// const keys = ['seo_locations','job_types','job_application','job_navigation','application_reference','keyword','disciplines']
 
-const allData = []
-const filter_data = []
-const search_data = []
-const job_application_data = []
-const navigation_data = []
+// const allData = []
+// const filter_data = []
+// const search_data = []
+// const job_application_data = []
+// const navigation_data = []
 
-for (let i = 0 ; i< types.length ; i++){
-  window[types[i]]  = jsonObj.filter(x=>
-    x.type === types[i] 
-  )
-  allData.push(window[types[i]].length)  
-}
+// for (let i = 0 ; i< types.length ; i++){
+//   window[types[i]]  = jsonObj.filter(x=>
+//     x.type === types[i] 
+//   )
+//   allData.push(window[types[i]].length)  
+// }
 
-for (let i = 0 ; i< types.length ; i++){
-  for (let j = 0 ; j< keys.length; j++){
-    window[types[i]+'_'+keys[j]] = jsonObj.filter(x=>
-       x.key === keys[j] && x.type === types[i]
-    )
-    eval(types[i]+'_'+'data').push(window[types[i]+'_'+keys[j]].length)
-  }
-}
+// for (let i = 0 ; i< types.length ; i++){
+//   for (let j = 0 ; j< keys.length; j++){
+//     window[types[i]+'_'+keys[j]] = jsonObj.filter(x=>
+//        x.key === keys[j] && x.type === types[i]
+//     )
+//     eval(types[i]+'_'+'data').push(window[types[i]+'_'+keys[j]].length)
+//   }
+// }
 
+
+
+// let valueFor;
+// let counts = {};
+// let result;
+// let valuess
+
+// function here (key, type){
+//     debugger
+//     if (key === ""){
+//         valueFor = jsonObj.filter(x=>  x.type === type )
+//     } else if (type === ""){
+//         valueFor = jsonObj.filter(x=>  x.key === key )
+//     } else {
+//         valueFor = jsonObj.filter(x=>  x.key === key && x.type === type )
+//     }
+
+//     valueFor.map(x=>x.value).forEach(function(x) { counts[x] = (counts[x] || 0)+1; })
+//     result =Object.keys(counts)
+    
+//     valuess =Object.values(counts)
+// }
+
+
+
+
+
+
+ 
 
 const coloeOne= [
     '#c7ad81',
@@ -4052,67 +4083,120 @@ const getState = (labels, data) => ({
   labelFontColor: "red",
   datasets: [{
     data,
-    backgroundColor: coloeOne
+    
+    backgroundColor: coloeOne,
+    
   }],
+  
 });
 
 
 
 export default class PieChart extends Component{
-    constructor(props) {
-      super(props);
-      this.state = {
-        all:"",
-        filter:"",
-        search:"",
-        job_application:"",
-        navigation:"",
-        values: "",
-      }
-    }
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       all:"",
+//       filter:"",
+//       search:"",
+//       job_application:"",
+//       navigation:"",
+//       type:"",
+//       key:"",
+//       values:""
+//     }
+//   }
 
-    componentWillMount() {
-        this.gooo=()=>{
-            this.setState({
-                all: getState(types, allData),
-                filter: getState(keys, filter_data),
-                search: getState(keys, search_data),
-                job_application: getState(keys, job_application_data),
-                navigation: getState(keys, navigation_data),
-                values: getState(keys, navigation_data),
-            })
-        }
+
+// 	componentWillMount() {
+
+//         this.gooo=()=>{
+//             this.setState({
+//                 all: getState(types, allData),
+//              filter: getState(keys, filter_data),
+//              search: getState(keys, search_data),
+//              job_application: getState(keys, job_application_data),
+//              navigation: getState(keys, navigation_data),
+//              values: getState(result, valuess)
+//            })
+//         }
         
-        this.gooo()
-        setInterval(() => { this.gooo()}, 4000)
-    }
+//         this.gooo()
+// 		setInterval(() => {
+//             this.gooo()
+            
+//     }, 4000)
+//     }
 
+//     handleType=(e)=>{
+//         this.setState({ type: e.target.value })
+//         here(this.state.key, e.target.value)
+//         this.gooo()
+//       }
+    
+//     handleKey=(e)=>{
+//       this.setState({ key: e.target.value })
+//       here(e.target.value, this.state.type)
+//       this.gooo()
+//     }
+
+    
 
 
   render() {
-    const {
-        all,
-        filter,
-        search,
-        job_application,
-        navigation,
-        values
-      } = this.state
+    // console.log()
+    // const {
+    //     all,
+    //     filter,
+    //     search,
+    //     job_application,
+    //     navigation
+    //   } = this.state
 
-    let props = {
-        all,
-        filter,
-        search,
-        job_application,
-        navigation      
-        }
-
-   
+    // let props = {
+    //     all,
+    //     filter,
+    //     search,
+    //     job_application,
+    //     navigation      
+    //     }
     return (
-        <>
-           <ShowPieChart {...props} />
-           <ShowSearch searchFilter={values}/>
-        </>
+      <>
+       <ShowPieChart {...props} />
+
+       <FormGroup>
+          <Label for="exampleSelect">Select</Label>
+          <Input name="type" onChange={this.handleType} type="select" name="select" id="exampleSelect">
+            <option value="">filter</option>
+            <option>search</option>
+            <option>job_application</option>
+            <option>navigation</option>
+          </Input>
+        </FormGroup>
+
+
+
+        <FormGroup>
+          <Label for="exampleSelect">Select</Label>
+          <Input name="key" onChange={this.handleKey} type="select" name="select" id="exampleSelect">
+            <option>seo_locations</option>
+            <option>job_types</option>
+            <option>job_application</option>
+            <option>job_navigation</option>
+            <option>application_reference</option>
+            <option>keyword</option>
+            <option>disciplines</option>
+          </Input>
+        </FormGroup>
+
+        <Doughnut 
+          data={this.state.values} 
+          width={110}
+          height={50}
+          color={'#fff'}
+        />
+       
+       </>
     );
   }
 }

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import ShowPieChart from './ShowPieChart'
-import ShowSearch from './ShowSearch';
+import {Doughnut} from 'react-chartjs-2';
+import '../style/chart.scss';
+import {FormGroup, Label, Input } from 'reactstrap';
+
 
 const jsonObj = [{
     "id": "73",
@@ -4004,127 +4006,157 @@ const jsonObj = [{
 }
 ]
 
+
+// let valueFor;
+// let counts = {};
+// let result;
+// let valuess
+
+// function here (key, type){
+//     debugger
+//     if (key === ""){
+//         valueFor = jsonObj.filter(x=>  x.type === type )
+//     } else if (type === ""){
+//         valueFor = jsonObj.filter(x=>  x.key === key )
+//     } else {
+//         valueFor = jsonObj.filter(x=>  x.key === key && x.type === type )
+//     }
+
+//     valueFor.map(x=>x.value).forEach(function(x) { counts[x] = (counts[x] || 0)+1; })
+//     result =Object.keys(counts)
+    
+//     valuess =Object.values(counts)
+// }
+
+
 const types = ['filter','search', 'job_application', 'navigation']
 
 const keys = ['seo_locations','job_types','job_application','job_navigation','application_reference','keyword','disciplines']
+let wanna = []
 
-const allData = []
-const filter_data = []
-const search_data = []
-const job_application_data = []
-const navigation_data = []
 
-for (let i = 0 ; i< types.length ; i++){
-  window[types[i]]  = jsonObj.filter(x=>
-    x.type === types[i] 
-  )
-  allData.push(window[types[i]].length)  
-}
+const hhh =(key, type)=>{
+    debugger
+   if(key && type){
+      
+            wanna = jsonObj.filter(x=>
+               x.key === key && x.type === type
+           )
+        //    wanna.push(window[types[i]+'_'+keys[j]].length)
+      
+   }
 
-for (let i = 0 ; i< types.length ; i++){
-  for (let j = 0 ; j< keys.length; j++){
-    window[types[i]+'_'+keys[j]] = jsonObj.filter(x=>
-       x.key === keys[j] && x.type === types[i]
-    )
-    eval(types[i]+'_'+'data').push(window[types[i]+'_'+keys[j]].length)
-  }
 }
 
 
-const coloeOne= [
-    '#c7ad81',
-    '#e6e4d8',
-    '#c3c3bb',
-    '#a7c7bf',
-    '#a7bcc7',
-    '#a7a9c7',
-    '#c7a7c2',
-    '#c7a7a7',
-    '#c1c7a7',
-    '#a7c7aa',
-    '#809e83',
-    '#8283a2',
-    '#a28282',
-]
 
-const getState = (labels, data) => ({
-  labels,
+const getState = ( data) => ({
   labelFontColor: "red",
   datasets: [{
     data,
-    backgroundColor: coloeOne
+    
+    
   }],
+  
 });
 
 
 
-export default class PieChart extends Component{
+export default class ShowSearch extends Component{
     constructor(props) {
-      super(props);
-      this.state = {
-        all:"",
-        filter:"",
-        search:"",
-        job_application:"",
-        navigation:"",
-        values: "",
-      }
+        super(props);
+        this.state = {
+          key:"",
+          type:"",
+          value:""
+        }
     }
 
-    componentWillMount() {
-        this.gooo=()=>{
-            this.setState({
-                all: getState(types, allData),
-                filter: getState(keys, filter_data),
-                search: getState(keys, search_data),
-                job_application: getState(keys, job_application_data),
-                navigation: getState(keys, navigation_data),
-                values: getState(keys, navigation_data),
-            })
-        }
-        
-        this.gooo()
-        setInterval(() => { this.gooo()}, 4000)
+    handleKey=(e)=>{
+        this.setState({key : e.target.value})
+        hhh(e.target.value, this.state.type)
+        this.setState({value: getState(wanna)})
     }
 
+   handleType=(e)=>{
+   this.setState({type : e.target.value})
+   hhh(this.state.key, e.target.value)
+   this.setState({value: getState(wanna)})
+   }
 
-
-  render() {
-    const {
-        all,
-        filter,
-        search,
-        job_application,
-        navigation,
-        values
-      } = this.state
-
-    let props = {
-        all,
-        filter,
-        search,
-        job_application,
-        navigation      
-        }
-
-   
-    return (
-        <>
-           <ShowPieChart {...props} />
-           <ShowSearch searchFilter={values}/>
-        </>
-    );
-  }
+componentDidMount(){
+    hhh(this.state.key, this.state.type)
+    this.setState({value: getState(wanna)})
 }
 
+  fetchData=()=>{
+    hhh(this.state.key, this.state.type)
+//       debugger
+//       const getState = ( data) => ({
+//         labelFontColor: "red",
+//         datasets: [{
+//           data,
+          
+          
+//         }],
+        
+//       });
+//     let counts = {};
+//    const newObject =  jsonObj.filter(x=>
+//         x.type === this.state.type && x.key === this.state.key
+//     ).map(x=>x.value).forEach(function(x) { counts[x] = (counts[x] || 0)+1; })
+
+//     const result =Object.keys(counts)
+//     const valuess =Object.values(counts)
+    // {(this.state.value.length === 0 )? alert("opps! no result"): ""}
+    this.setState({value: getState(wanna)}) 
+  }
+
+  
+
+render() {
+   console.log(this.state.key + this.state.type)
+    return (
+    <div className='chart search'>
+        <h3>Start Searching</h3>
+
+        <div>
+            <FormGroup>
+                <Label for="exampleSelect">Select Type</Label>
+                <Input onChange={this.handleType} name="type" type="select" name="select" id="exampleSelect">
+                    <option value="">Select Type</option>
+                    <option >filter</option>
+                    <option>search</option>
+                    <option>job_application</option>
+                    <option>navigation</option>
+                </Input>
+            </FormGroup>
+
+            <FormGroup>
+                <Label for="exampleSelect">Select Key</Label>
+                <Input onChange={this.handleKey} name="key" type="select" name="select" id="exampleSelect">
+                    <option value="">Select Key</option>
+                    <option>seo_locations</option>
+                    <option>job_types</option>
+                    <option>job_application</option>
+                    <option>job_navigation</option>
+                    <option>application_reference</option>
+                    <option>keyword</option>
+                    <option>disciplines</option>
+                </Input>
+            </FormGroup>
+        </div>
 
 
 
 
-
-
-
-
-
-
-
+        <Doughnut 
+          data={this.state.value} 
+          width={110}
+          height={50}
+          color={'#fff'}
+        />
+        
+    </div>
+  )
+}}

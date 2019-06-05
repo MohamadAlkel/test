@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-// import ShowPieChart from '../containers/ShowPieChart'
 import PieChart from '../containers/PieChart'
+// import Search from '../containers/Search'
 
 
 
@@ -12,6 +11,7 @@ export default class Home extends Component {
       <div className="App">
         
               <PieChart/>
+              {/* <Search /> */}
            
       
        
