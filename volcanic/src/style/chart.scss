@@ -1,8 +1,10 @@
 body{
   background-color: #f7f7f7;
   font-family: Arial, Helvetica, sans-serif;
-  // font-size: 10px
-  // color: aliceblue
+  overflow-x: hidden;
+}
+
+.chart{
   h1{
     font-size: 80px;
     text-align: left;
@@ -16,24 +18,30 @@ body{
     text-align: center;
     color: rgb(95, 95, 95);
     font-weight: bold;
-
   }
   h6{
     font-size: 35px;
     margin: 30px 0px;
+    margin-top: 80px;
     text-align: center;
     color: rgb(95, 95, 95);
     font-weight: bold;
-
   }
 }
 
 .search{
   border-top: 3px solid rgba(94, 86, 86, 0.11); 
-  margin-top:40px;
+  margin-top:100px;
   h1{
     font-size: 60px;
     margin: 40px 80px;
+    text-align: center;
+    color: rgb(95, 95, 95);
+    font-weight: bold;
+  }
+  h6{
+    font-size: 25px;
+    margin-top: 10px;
     text-align: center;
     color: rgb(95, 95, 95);
     font-weight: bold;
@@ -49,4 +57,20 @@ body{
     padding: 30px;
     margin: auto;
   }
+  .chartValue{
+    background-color: black;
+    overflow: hidden;
+    color: black;
+    width: 114%;
+    margin: auto;
+    margin-bottom: 35px;
+    position: absolute;
+    left: -100px;
+  }
+  .canvasjs-chart-canvas{
+     background-color: #0000000a;
+     overflow: hidden;
+  }
 }
+
+

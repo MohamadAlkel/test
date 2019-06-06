@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import {Doughnut} from 'react-chartjs-2';
-import '../style/chart.scss';
+import CanvasJSReact from '../assets/canvasjs.react';
 import {FormGroup, Label, Input } from 'reactstrap';
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-
+// let's say we fetch this object from database
 const jsonObj = [{
     "id": "73",
     "visitor_id": "3",
@@ -4007,146 +4007,109 @@ const jsonObj = [{
 ]
 
 
-const types = ['filter','search', 'job_application', 'navigation']
+export default class FilterChart extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+	    	key:"",
+	 		type:"",
+		}
+	}
 
-const keys = ['seo_locations','job_types','job_application','job_navigation','application_reference','keyword','disciplines']
-let wanna = [];
-let result = [];
+	handleKey=(e)=>{
+		this.setState({key : e.target.value})
+	}
 
+	handleType=(e)=>{
+		this.setState({type : e.target.value})
+	}
 
-const hhh =(key, type)=>{
-    debugger
-   if(key === "" && type === ""){
-       wanna = jsonObj
-   }else if (key ==="" ) {
-    wanna = jsonObj.filter(x=>
-        x.type === type
-    )
-   }  else if (type === ""){
-    wanna = jsonObj.filter(x=>
-        x.key === key
-    )
-   } else {
-       wanna = jsonObj.filter(x=>
-          x.key === key && x.type === type
-      )
-   }
+	
+	render() {
+		const {type,key}=this.state
+		let information = [];
+		let counts = {}
+		let centerText= ""
 
-   let counts = {}
+		//to check the filter results and filter it
+		if(key === "" && type === ""){
+			information = jsonObj
+		} else if (key ==="" ) {
+	    	information = jsonObj.filter(x=>
+		    	x.type === type
+	    	)
+		} else if (type === ""){
+	    	information = jsonObj.filter(x=>
+		    	x.key === key
+			)
+		} else {
+			information = jsonObj.filter(x=>
+				x.key === key && x.type === type
+			)
+		}
 
-   wanna.map(x=>x.value).forEach(function(x) { counts[x] = (counts[x] || 0)+1; })
-   result =Object.keys(counts)
-   wanna =Object.values(counts)
-      
+		// count duplicates in array
+		information.map(x=>x.value).forEach(function(x) { counts[x] = (counts[x] || 0)+1; })
+		// To make it suitable for canvasjs
+		const output = Object.entries(counts).map(([name, y]) => ({name,y}));
+        // to check if no data, so that's to give friendly message for user
+		if(information.length === 0){
+			centerText = "Opps!!!  No values there"
+		}
 
+        // this object to give information for Canvasjs 
+		const options = {
+			animationEnabled: true,
+			subtitles: [{
+				text: centerText,
+				verticalAlign: "center",
+				fontSize: 24,
+				dockInsidePlotArea: true
+			}],
+			data: [{
+				type: "doughnut",
+				dataPoints: output
+			}]
+		}
+		
+
+		return (
+		<div className="search">
+            <h1>React Doughnut Chart</h1>
+		    <div className="down">
+				<FormGroup>
+					<Label for="exampleSelect">Select Type</Label>
+					<Input onChange={this.handleType} name="type" type="select" name="select" id="exampleSelect">
+						<option value="">Select Type</option>
+						<option >filter</option>
+						<option>search</option>
+						<option>job_application</option>
+						<option>navigation</option>
+					</Input>
+				</FormGroup>
+
+				<FormGroup>
+					<Label for="exampleSelect">Select Key</Label>
+					<Input onChange={this.handleKey} name="key" type="select" name="select" id="exampleSelect">
+						<option value="">Select Key</option>
+						<option>seo_locations</option>
+						<option>job_types</option>
+						<option>job_application</option>
+						<option>job_navigation</option>
+						<option>application_reference</option>
+						<option>keyword</option>
+						<option>disciplines</option>
+					</Input>
+				</FormGroup>
+			</div>
+
+            <h6>put the mouse over chart to see the value</h6>
+			<div className="chartValue">
+			   <CanvasJSChart options = {options}/>
+			</div>
+		</div>
+		);
+	}
 }
 
-
-
-const coloeOne= [
-    '#c7ad81',
-    '#e6e4d8',
-    '#c3c3bb',
-    '#a7c7bf',
-    '#a7bcc7',
-    '#a7a9c7',
-    '#c7a7c2',
-    '#c7a7a7',
-    '#c1c7a7',
-    '#a7c7aa',
-    '#809e83',
-    '#8283a2',
-    '#a28282',
-]
-
-const getState = (labels, data) => ({
-  labels,
-  labelFontColor: "red",
-  datasets: [{
-    data,
-    backgroundColor: coloeOne
-  }],
-});
-
-
-
-export default class ShowSearch extends Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-          key:"",
-          type:"",
-          value:""
-        }
-    }
-
-    handleKey=(e)=>{
-        this.setState({key : e.target.value})
-        hhh(e.target.value, this.state.type)
-        this.setState({value: getState(result, wanna)})
-   }
-
-   handleType=(e)=>{
-   this.setState({type : e.target.value})
-   hhh(this.state.key, e.target.value)
-   this.setState({value: getState(result, wanna)})
-   }
-
-componentDidMount(){
-    hhh(this.state.key, this.state.type)
-    this.setState({value: getState(result, wanna)})
-}
-
-  fetchData=()=>{
-    hhh(this.state.key, this.state.type)
-    this.setState({value: getState(result, wanna)}) 
-  }
-
-  
-
-render() {
-   console.log(this.state.key + this.state.type)
-    return (
-    <div className='chart search'>
-        <h3>Start Searching</h3>
-
-        <div>
-            <FormGroup>
-                <Label for="exampleSelect">Select Type</Label>
-                <Input onChange={this.handleType} name="type" type="select" name="select" id="exampleSelect">
-                    <option value="">Select Type</option>
-                    <option >filter</option>
-                    <option>search</option>
-                    <option>job_application</option>
-                    <option>navigation</option>
-                </Input>
-            </FormGroup>
-
-            <FormGroup>
-                <Label for="exampleSelect">Select Key</Label>
-                <Input onChange={this.handleKey} name="key" type="select" name="select" id="exampleSelect">
-                    <option value="">Select Key</option>
-                    <option>seo_locations</option>
-                    <option>job_types</option>
-                    <option>job_application</option>
-                    <option>job_navigation</option>
-                    <option>application_reference</option>
-                    <option>keyword</option>
-                    <option>disciplines</option>
-                </Input>
-            </FormGroup>
-        </div>
-
-
-
-
-        <Doughnut 
-          data={this.state.value} 
-          width={110}
-          height={50}
-          color={'#fff'}
-        />
-        
-    </div>
-  )
-}}
+ 

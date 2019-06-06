@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ShowPieChart from './ShowPieChart'
-import ShowSearch from './ShowSearch';
-import DoughnutChart from './DoughnutChart';
+import FilterChart from './FilterChart';
 
+// let's say we fetch this object from database
 const jsonObj = [{
     "id": "73",
     "visitor_id": "3",
@@ -4006,7 +4006,6 @@ const jsonObj = [{
 ]
 
 const types = ['filter','search', 'job_application', 'navigation']
-
 const keys = ['seo_locations','job_types','job_application','job_navigation','application_reference','keyword','disciplines']
 
 const allData = []
@@ -4015,13 +4014,15 @@ const search_data = []
 const job_application_data = []
 const navigation_data = []
 
+// filtered data to get types  
 for (let i = 0 ; i< types.length ; i++){
-  window[types[i]]  = jsonObj.filter(x=>
+  window[types[i]] = jsonObj.filter(x=>
     x.type === types[i] 
   )
   allData.push(window[types[i]].length)  
 }
 
+// filtered data to get keys  
 for (let i = 0 ; i< types.length ; i++){
   for (let j = 0 ; j< keys.length; j++){
     window[types[i]+'_'+keys[j]] = jsonObj.filter(x=>
@@ -4031,29 +4032,27 @@ for (let i = 0 ; i< types.length ; i++){
   }
 }
 
-
-const coloeOne= [
-    '#c7ad81',
-    '#e6e4d8',
-    '#c3c3bb',
-    '#a7c7bf',
-    '#a7bcc7',
-    '#a7a9c7',
-    '#c7a7c2',
-    '#c7a7a7',
-    '#c1c7a7',
-    '#a7c7aa',
-    '#809e83',
-    '#8283a2',
-    '#a28282',
-]
-
+// this object to give information for Chartjs 
 const getState = (labels, data) => ({
   labels,
   labelFontColor: "red",
   datasets: [{
     data,
-    backgroundColor: coloeOne
+    backgroundColor: [
+        '#c7ad81',
+        '#e6e4d8',
+        '#c3c3bb',
+        '#a7c7bf',
+        '#a7bcc7',
+        '#a7a9c7',
+        '#c7a7c2',
+        '#c7a7a7',
+        '#c1c7a7',
+        '#a7c7aa',
+        '#809e83',
+        '#8283a2',
+        '#a28282',
+    ]
   }],
 });
 
@@ -4068,7 +4067,6 @@ export default class PieChart extends Component{
         search:"",
         job_application:"",
         navigation:"",
-        values: "",
       }
     }
 
@@ -4080,11 +4078,11 @@ export default class PieChart extends Component{
                 search: getState(keys, search_data),
                 job_application: getState(keys, job_application_data),
                 navigation: getState(keys, navigation_data),
-                values: getState(keys, navigation_data),
             })
         }
-        
+        // to initialize
         this.gooo()
+        // to dynamically generate
         setInterval(() => { this.gooo()}, 4000)
     }
 
@@ -4097,10 +4095,9 @@ export default class PieChart extends Component{
         search,
         job_application,
         navigation,
-        values
       } = this.state
 
-    let props = {
+    const props = {
         all,
         filter,
         search,
@@ -4108,12 +4105,10 @@ export default class PieChart extends Component{
         navigation      
         }
 
-   
     return (
         <>
            <ShowPieChart {...props} />
-           {/* <ShowSearch searchFilter={values}/> */}
-           <DoughnutChart/>
+           <FilterChart/>
         </>
     );
   }

@@ -5,7 +5,6 @@ import { Row, Col } from 'reactstrap';
 
 
 export default function ShowPieChart(props) {
-
   return (
     <div className='chart'>
         <h1>Hello Volcanic!!!</h1>
@@ -16,13 +15,12 @@ export default function ShowPieChart(props) {
           height={50}
           color={'#fff'}
         />
-
         <Row>
           <Col xs="6">
             <h6>Filter</h6>
             <Doughnut 
             data={props.filter} 
-            width={70}
+            width={90}
             height={50}
             />
           </Col>
@@ -30,7 +28,7 @@ export default function ShowPieChart(props) {
             <h6>Search</h6>
             <Doughnut 
             data={props.search} 
-            width={70}
+            width={90}
             height={50}
             />
           </Col>
@@ -41,7 +39,7 @@ export default function ShowPieChart(props) {
             <h6>Job_application</h6>
             <Doughnut 
             data={props.job_application} 
-            width={70}
+            width={90}
             height={50}
             />
           </Col>
@@ -49,7 +47,7 @@ export default function ShowPieChart(props) {
             <h6>Navigation</h6>
             <Doughnut 
             data={props.navigation} 
-            width={70}
+            width={90}
             height={50}
             />
           </Col>
