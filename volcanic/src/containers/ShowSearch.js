@@ -4007,57 +4007,65 @@ const jsonObj = [{
 ]
 
 
-// let valueFor;
-// let counts = {};
-// let result;
-// let valuess
-
-// function here (key, type){
-//     debugger
-//     if (key === ""){
-//         valueFor = jsonObj.filter(x=>  x.type === type )
-//     } else if (type === ""){
-//         valueFor = jsonObj.filter(x=>  x.key === key )
-//     } else {
-//         valueFor = jsonObj.filter(x=>  x.key === key && x.type === type )
-//     }
-
-//     valueFor.map(x=>x.value).forEach(function(x) { counts[x] = (counts[x] || 0)+1; })
-//     result =Object.keys(counts)
-    
-//     valuess =Object.values(counts)
-// }
-
-
 const types = ['filter','search', 'job_application', 'navigation']
 
 const keys = ['seo_locations','job_types','job_application','job_navigation','application_reference','keyword','disciplines']
-let wanna = []
+let wanna = [];
+let result = [];
 
 
 const hhh =(key, type)=>{
     debugger
-   if(key && type){
-      
-            wanna = jsonObj.filter(x=>
-               x.key === key && x.type === type
-           )
-        //    wanna.push(window[types[i]+'_'+keys[j]].length)
-      
+   if(key === "" && type === ""){
+       wanna = jsonObj
+   }else if (key ==="" ) {
+    wanna = jsonObj.filter(x=>
+        x.type === type
+    )
+   }  else if (type === ""){
+    wanna = jsonObj.filter(x=>
+        x.key === key
+    )
+   } else {
+       wanna = jsonObj.filter(x=>
+          x.key === key && x.type === type
+      )
    }
+
+   let counts = {}
+
+   wanna.map(x=>x.value).forEach(function(x) { counts[x] = (counts[x] || 0)+1; })
+   result =Object.keys(counts)
+   wanna =Object.values(counts)
+      
 
 }
 
 
 
-const getState = ( data) => ({
+const coloeOne= [
+    '#c7ad81',
+    '#e6e4d8',
+    '#c3c3bb',
+    '#a7c7bf',
+    '#a7bcc7',
+    '#a7a9c7',
+    '#c7a7c2',
+    '#c7a7a7',
+    '#c1c7a7',
+    '#a7c7aa',
+    '#809e83',
+    '#8283a2',
+    '#a28282',
+]
+
+const getState = (labels, data) => ({
+  labels,
   labelFontColor: "red",
   datasets: [{
     data,
-    
-    
+    backgroundColor: coloeOne
   }],
-  
 });
 
 
@@ -4075,41 +4083,23 @@ export default class ShowSearch extends Component{
     handleKey=(e)=>{
         this.setState({key : e.target.value})
         hhh(e.target.value, this.state.type)
-        this.setState({value: getState(wanna)})
-    }
+        this.setState({value: getState(result, wanna)})
+   }
 
    handleType=(e)=>{
    this.setState({type : e.target.value})
    hhh(this.state.key, e.target.value)
-   this.setState({value: getState(wanna)})
+   this.setState({value: getState(result, wanna)})
    }
 
 componentDidMount(){
     hhh(this.state.key, this.state.type)
-    this.setState({value: getState(wanna)})
+    this.setState({value: getState(result, wanna)})
 }
 
   fetchData=()=>{
     hhh(this.state.key, this.state.type)
-//       debugger
-//       const getState = ( data) => ({
-//         labelFontColor: "red",
-//         datasets: [{
-//           data,
-          
-          
-//         }],
-        
-//       });
-//     let counts = {};
-//    const newObject =  jsonObj.filter(x=>
-//         x.type === this.state.type && x.key === this.state.key
-//     ).map(x=>x.value).forEach(function(x) { counts[x] = (counts[x] || 0)+1; })
-
-//     const result =Object.keys(counts)
-//     const valuess =Object.values(counts)
-    // {(this.state.value.length === 0 )? alert("opps! no result"): ""}
-    this.setState({value: getState(wanna)}) 
+    this.setState({value: getState(result, wanna)}) 
   }
 
   
