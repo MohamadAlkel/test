@@ -4,8 +4,6 @@ import {FormGroup, Label, Input } from 'reactstrap';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 
- 
-
 const jsonObj = [{
     "id": "73",
     "visitor_id": "3",
@@ -4009,131 +4007,96 @@ const jsonObj = [{
 ]
 
 
-const types = ['filter','search', 'job_application', 'navigation']
-
-const keys = ['seo_locations','job_types','job_application','job_navigation','application_reference','keyword','disciplines']
-let wanna = [];
-let result = [];
-
-
-
-
-
-
-const getState = (labels, data) => ({
-	labels,
-	labelFontColor: "red",
-	datasets: [{
-	  data
-	}],
-  });
-
 class DoughnutChart extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 		key:"",
 		type:"",
-		value:""
 		}
 	}
 
 	handleKey=(e)=>{
-		
 		this.setState({key : e.target.value})
-	
 	}
 
 	handleType=(e)=>{
 		this.setState({type : e.target.value})
 	}
 
-
 	render() {
 		const {type,key}=this.state
-
-
 		let wanna = [];
+		let counts = {}
+		let centerText= ""
 		
-			if(key === "" && type === ""){
-				wanna = jsonObj
-			}else if (key ==="" ) {
-			wanna = jsonObj.filter(x=>
-				x.type === type
+		if(key === "" && type === ""){
+			wanna = jsonObj
+		} else if (key ==="" ) {
+	    	wanna = jsonObj.filter(x=>
+		    	x.type === type
+	    	)
+		} else if (type === ""){
+	    	wanna = jsonObj.filter(x=>
+		    	x.key === key
 			)
-		   }  else if (type === ""){
+		} else {
 			wanna = jsonObj.filter(x=>
-				x.key === key
-				)
-		   } else {
-			   wanna = jsonObj.filter(x=>
-				  x.key === key && x.type === type
-			  )
-		   }
+				x.key === key && x.type === type
+			)
+		}
 
-		   let counts = {}
-		   wanna.map(x=>x.value).forEach(function(x) { counts[x] = (counts[x] || 0)+1; })
-		   let output = Object.entries(counts).map(([name, y]) => ({name,y}));
-           debugger
-		   let centerTe= ""
+		wanna.map(x=>x.value).forEach(function(x) { counts[x] = (counts[x] || 0)+1; })
+		const output = Object.entries(counts).map(([name, y]) => ({name,y}));
+           
 
-		   if(wanna.length === 0){
-			   centerTe = "Opps!!!  No values there"
-		   }
-		//    result =Object.keys(counts)
-		//    wanna =Object.values(counts)
-		   
-		// console.log(output)
+		if(wanna.length === 0){
+			centerText = "Opps!!!  No values there"
+		}
 
 		const options = {
 			animationEnabled: true,
-			// title: {
-			// 	text: "Customer Satisfaction"
-			// },
 			subtitles: [{
-				text: centerTe,
+				text: centerText,
 				verticalAlign: "center",
 				fontSize: 24,
 				dockInsidePlotArea: true
 			}],
 			data: [{
 				type: "doughnut",
-				// showInLegend: true,
-				// indexLabel: "{name}: {y}",
-				// yValueFormatString: "#,###'%'",
 				dataPoints: output
 			}]
 		}
 		
 		return (
-		<div>
-              <h1>React Doughnut Chart</h1>
-		   <div>
-            <FormGroup>
-                <Label for="exampleSelect">Select Type</Label>
-                <Input onChange={this.handleType} name="type" type="select" name="select" id="exampleSelect">
-                    <option value="">Select Type</option>
-                    <option >filter</option>
-                    <option>search</option>
-                    <option>job_application</option>
-                    <option>navigation</option>
-                </Input>
-            </FormGroup>
+		<div className="search">
+            <h1>React Doughnut Chart</h1>
+		    <div className="down">
+				<FormGroup>
+					<Label for="exampleSelect">Select Type</Label>
+					<Input onChange={this.handleType} name="type" type="select" name="select" id="exampleSelect">
+						<option value="">Select Type</option>
+						<option >filter</option>
+						<option>search</option>
+						<option>job_application</option>
+						<option>navigation</option>
+					</Input>
+				</FormGroup>
 
-            <FormGroup>
-                <Label for="exampleSelect">Select Key</Label>
-                <Input onChange={this.handleKey} name="key" type="select" name="select" id="exampleSelect">
-                    <option value="">Select Key</option>
-                    <option>seo_locations</option>
-                    <option>job_types</option>
-                    <option>job_application</option>
-                    <option>job_navigation</option>
-                    <option>application_reference</option>
-                    <option>keyword</option>
-                    <option>disciplines</option>
-                </Input>
-            </FormGroup>
-        </div>
+				<FormGroup>
+					<Label for="exampleSelect">Select Key</Label>
+					<Input onChange={this.handleKey} name="key" type="select" name="select" id="exampleSelect">
+						<option value="">Select Key</option>
+						<option>seo_locations</option>
+						<option>job_types</option>
+						<option>job_application</option>
+						<option>job_navigation</option>
+						<option>application_reference</option>
+						<option>keyword</option>
+						<option>disciplines</option>
+					</Input>
+				</FormGroup>
+			</div>
 
 			
 			<CanvasJSChart options = {options} 

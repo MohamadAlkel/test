@@ -29,8 +29,24 @@ body{
 }
 
 .search{
-  .FormGroup{
-    width: 50px
-
+  border-top: 3px solid rgba(94, 86, 86, 0.11); 
+  margin-top:40px;
+  h1{
+    font-size: 60px;
+    margin: 40px 80px;
+    text-align: center;
+    color: rgb(95, 95, 95);
+    font-weight: bold;
+  }
+  .down{
+    background-color: rgb(189, 184, 184);
+    color: aliceblue;
+    font-size: 20px;
+    border-radius: 10px;
+    width: 50%;
+    display: flex;
+    justify-content: space-around;
+    padding: 30px;
+    margin: auto;
   }
 }
