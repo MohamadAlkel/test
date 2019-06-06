@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import ShowPieChart from './ShowPieChart'
-import ShowSearch from './ShowSearch';
-import DoughnutChart from './DoughnutChart';
+import CanvasJSReact from '../assets/canvasjs.react';
+import {FormGroup, Label, Input } from 'reactstrap';
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
+
+ 
 
 const jsonObj = [{
     "id": "73",
@@ -4005,128 +4008,141 @@ const jsonObj = [{
 }
 ]
 
+
 const types = ['filter','search', 'job_application', 'navigation']
 
 const keys = ['seo_locations','job_types','job_application','job_navigation','application_reference','keyword','disciplines']
-
-const allData = []
-const filter_data = []
-const search_data = []
-const job_application_data = []
-const navigation_data = []
-
-for (let i = 0 ; i< types.length ; i++){
-  window[types[i]]  = jsonObj.filter(x=>
-    x.type === types[i] 
-  )
-  allData.push(window[types[i]].length)  
-}
-
-for (let i = 0 ; i< types.length ; i++){
-  for (let j = 0 ; j< keys.length; j++){
-    window[types[i]+'_'+keys[j]] = jsonObj.filter(x=>
-       x.key === keys[j] && x.type === types[i]
-    )
-    eval(types[i]+'_'+'data').push(window[types[i]+'_'+keys[j]].length)
-  }
-}
+let wanna = [];
+let result = [];
 
 
-const coloeOne= [
-    '#c7ad81',
-    '#e6e4d8',
-    '#c3c3bb',
-    '#a7c7bf',
-    '#a7bcc7',
-    '#a7a9c7',
-    '#c7a7c2',
-    '#c7a7a7',
-    '#c1c7a7',
-    '#a7c7aa',
-    '#809e83',
-    '#8283a2',
-    '#a28282',
-]
+
+
+
 
 const getState = (labels, data) => ({
-  labels,
-  labelFontColor: "red",
-  datasets: [{
-    data,
-    backgroundColor: coloeOne
-  }],
-});
+	labels,
+	labelFontColor: "red",
+	datasets: [{
+	  data
+	}],
+  });
+
+class DoughnutChart extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+		key:"",
+		type:"",
+		value:""
+		}
+	}
+
+	handleKey=(e)=>{
+		
+		this.setState({key : e.target.value})
+	
+	}
+
+	handleType=(e)=>{
+		this.setState({type : e.target.value})
+	}
 
 
-
-export default class PieChart extends Component{
-    constructor(props) {
-      super(props);
-      this.state = {
-        all:"",
-        filter:"",
-        search:"",
-        job_application:"",
-        navigation:"",
-        values: "",
-      }
-    }
-
-    componentWillMount() {
-        this.gooo=()=>{
-            this.setState({
-                all: getState(types, allData),
-                filter: getState(keys, filter_data),
-                search: getState(keys, search_data),
-                job_application: getState(keys, job_application_data),
-                navigation: getState(keys, navigation_data),
-                values: getState(keys, navigation_data),
-            })
-        }
-        
-        this.gooo()
-        setInterval(() => { this.gooo()}, 4000)
-    }
+	render() {
+		const {type,key}=this.state
 
 
+		let wanna = [];
+		
+			if(key === "" && type === ""){
+				wanna = jsonObj
+			}else if (key ==="" ) {
+			wanna = jsonObj.filter(x=>
+				x.type === type
+			)
+		   }  else if (type === ""){
+			wanna = jsonObj.filter(x=>
+				x.key === key
+				)
+		   } else {
+			   wanna = jsonObj.filter(x=>
+				  x.key === key && x.type === type
+			  )
+		   }
 
-  render() {
-    const {
-        all,
-        filter,
-        search,
-        job_application,
-        navigation,
-        values
-      } = this.state
+		   let counts = {}
+		   wanna.map(x=>x.value).forEach(function(x) { counts[x] = (counts[x] || 0)+1; })
+		   let output = Object.entries(counts).map(([name, y]) => ({name,y}));
+           debugger
+		   let centerTe= ""
 
-    let props = {
-        all,
-        filter,
-        search,
-        job_application,
-        navigation      
-        }
+		   if(wanna.length === 0){
+			   centerTe = "Opps!!!  No values there"
+		   }
+		//    result =Object.keys(counts)
+		//    wanna =Object.values(counts)
+		   
+		// console.log(output)
 
-   
-    return (
-        <>
-           <ShowPieChart {...props} />
-           {/* <ShowSearch searchFilter={values}/> */}
-           <DoughnutChart/>
-        </>
-    );
-  }
+		const options = {
+			animationEnabled: true,
+			// title: {
+			// 	text: "Customer Satisfaction"
+			// },
+			subtitles: [{
+				text: centerTe,
+				verticalAlign: "center",
+				fontSize: 24,
+				dockInsidePlotArea: true
+			}],
+			data: [{
+				type: "doughnut",
+				// showInLegend: true,
+				// indexLabel: "{name}: {y}",
+				// yValueFormatString: "#,###'%'",
+				dataPoints: output
+			}]
+		}
+		
+		return (
+		<div>
+              <h1>React Doughnut Chart</h1>
+		   <div>
+            <FormGroup>
+                <Label for="exampleSelect">Select Type</Label>
+                <Input onChange={this.handleType} name="type" type="select" name="select" id="exampleSelect">
+                    <option value="">Select Type</option>
+                    <option >filter</option>
+                    <option>search</option>
+                    <option>job_application</option>
+                    <option>navigation</option>
+                </Input>
+            </FormGroup>
+
+            <FormGroup>
+                <Label for="exampleSelect">Select Key</Label>
+                <Input onChange={this.handleKey} name="key" type="select" name="select" id="exampleSelect">
+                    <option value="">Select Key</option>
+                    <option>seo_locations</option>
+                    <option>job_types</option>
+                    <option>job_application</option>
+                    <option>job_navigation</option>
+                    <option>application_reference</option>
+                    <option>keyword</option>
+                    <option>disciplines</option>
+                </Input>
+            </FormGroup>
+        </div>
+
+			
+			<CanvasJSChart options = {options} 
+				/* onRef={ref => this.chart = ref} */
+			/>
+			{/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
+		</div>
+		);
+	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
+export default DoughnutChart;
